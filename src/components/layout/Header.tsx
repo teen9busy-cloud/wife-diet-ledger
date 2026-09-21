@@ -101,7 +101,7 @@ export const Header: React.FC<HeaderProps> = ({ onSearchClick, onAddInBodyClick 
             )}
           </button>
 
-          {/* 탭 3: 체중 통계 분석 */}
+          {/* 탭 3: 통계 */}
           <button
             onClick={() => setActiveTab('stats')}
             className={`flex-1 py-2.5 text-center text-sm font-bold transition-all relative ${
@@ -110,7 +110,7 @@ export const Header: React.FC<HeaderProps> = ({ onSearchClick, onAddInBodyClick 
                 : 'text-gray-400 hover:text-gray-700'
             }`}
           >
-            체중 통계 분석
+            통계
             {activeTab === 'stats' && (
               <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-600" />
             )}

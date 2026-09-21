@@ -10,7 +10,7 @@ interface InbodyModalProps {
 }
 
 export const InbodyModal: React.FC<InbodyModalProps> = ({ isOpen, onClose, initialRecord }) => {
-  const { saveInBodyRecord, deleteInBodyRecord, records } = useData();
+  const { saveInBodyRecord, deleteInBodyRecord } = useData();
 
   const todayStr = new Date().toISOString().slice(0, 10);
   const [date, setDate] = useState<string>(todayStr);
@@ -19,7 +19,6 @@ export const InbodyModal: React.FC<InbodyModalProps> = ({ isOpen, onClose, initi
   const [bodyFatPercent, setBodyFatPercent] = useState<string>('');
   const [waistHipRatio, setWaistHipRatio] = useState<string>('');
   const [visceralFatLevel, setVisceralFatLevel] = useState<string>('');
-  const [memo, setMemo] = useState<string>('');
 
   useEffect(() => {
     if (initialRecord) {
@@ -29,19 +28,16 @@ export const InbodyModal: React.FC<InbodyModalProps> = ({ isOpen, onClose, initi
       setBodyFatPercent(String(initialRecord.bodyFatPercent));
       setWaistHipRatio(String(initialRecord.waistHipRatio));
       setVisceralFatLevel(String(initialRecord.visceralFatLevel));
-      setMemo(initialRecord.memo || '');
     } else {
       setDate(todayStr);
-      // 최근 체중 자동 제안
-      const latestWeight = records.find((r) => r.weight !== null)?.weight;
-      setWeight(latestWeight ? String(latestWeight) : '');
+      // 신규 등록 시 모든 항목 빈 칸으로 시작
+      setWeight('');
       setSkeletalMuscle('');
       setBodyFatPercent('');
-      setWaistHipRatio('0.82');
-      setVisceralFatLevel('6');
-      setMemo('');
+      setWaistHipRatio('');
+      setVisceralFatLevel('');
     }
-  }, [initialRecord, isOpen, records, todayStr]);
+  }, [initialRecord, isOpen, todayStr]);
 
   if (!isOpen) return null;
 
@@ -58,9 +54,9 @@ export const InbodyModal: React.FC<InbodyModalProps> = ({ isOpen, onClose, initi
       weight: parseFloat(weight),
       skeletalMuscle: parseFloat(skeletalMuscle),
       bodyFatPercent: parseFloat(bodyFatPercent),
-      waistHipRatio: waistHipRatio ? parseFloat(waistHipRatio) : 0.82,
-      visceralFatLevel: visceralFatLevel ? parseInt(visceralFatLevel, 10) : 6,
-      memo: memo.trim(),
+      waistHipRatio: waistHipRatio ? parseFloat(waistHipRatio) : 0.80,
+      visceralFatLevel: visceralFatLevel ? parseInt(visceralFatLevel, 10) : 5,
+      memo: '',
     });
 
     onClose();
@@ -163,37 +159,22 @@ export const InbodyModal: React.FC<InbodyModalProps> = ({ isOpen, onClose, initi
             </div>
           </div>
 
-          {/* 내장지방레벨 */}
+          {/* 내장지방레벨 (입력란으로 변경) */}
           <div>
             <label className="block text-xs font-semibold text-gray-600 mb-1">
               내장지방레벨 (1~20)
             </label>
-            <div className="flex items-center gap-3">
-              <input
-                type="range"
-                min="1"
-                max="20"
-                value={visceralFatLevel || 5}
-                onChange={(e) => setVisceralFatLevel(e.target.value)}
-                className="flex-1 accent-brand-600"
-              />
-              <span className="w-12 text-center font-bold px-2 py-1 bg-gray-100 rounded text-brand-700">
-                Lv. {visceralFatLevel || 5}
-              </span>
-            </div>
-            <p className="text-[11px] text-gray-400 mt-1">1~9레벨은 안심 표준 범위입니다.</p>
-          </div>
-
-          {/* 메모 */}
-          <div>
-            <label className="block text-xs font-semibold text-gray-600 mb-1">측정 장소 / 메모</label>
             <input
-              type="text"
-              placeholder="예: 헬스장 인바디, 아침 공복 측정"
-              value={memo}
-              onChange={(e) => setMemo(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-brand-500"
+              type="number"
+              min="1"
+              max="20"
+              step="1"
+              placeholder="예: 6"
+              value={visceralFatLevel}
+              onChange={(e) => setVisceralFatLevel(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500"
             />
+            <p className="text-[11px] text-gray-400 mt-1">1~9레벨은 안심 표준 범위입니다.</p>
           </div>
 
           {/* 하단 버튼 */}
