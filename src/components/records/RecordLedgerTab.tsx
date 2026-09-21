@@ -189,7 +189,7 @@ export const RecordLedgerTab: React.FC<RecordLedgerTabProps> = ({ onOpenAddModal
           <div className="w-14 flex-shrink-0 text-center">운동</div>
         )}
         {settings.columns.showAlcohol && (
-          <div className="w-9 flex-shrink-0 text-center">음주</div>
+          <div className="w-11 flex-shrink-0 text-center">음주</div>
         )}
         {settings.columns.showCalories && (
           <div className="w-11 flex-shrink-0 text-center">칼로리</div>
@@ -307,12 +307,12 @@ export const RecordLedgerTab: React.FC<RecordLedgerTabProps> = ({ onOpenAddModal
                         </div>
                       )}
 
-                      {/* 음주 */}
+                      {/* 음주 (너비 44px - 체크 대신 '음주' 텍스트 노출) */}
                       {settings.columns.showAlcohol && (
-                        <div className="w-9 flex-shrink-0 text-center text-gray-700">
+                        <div className="w-11 flex-shrink-0 text-center flex items-center justify-center">
                           {rec && (rec.alcohol || (rec.alcoholCount && rec.alcoholCount > 0)) ? (
-                            <span className="inline-flex items-center justify-center text-amber-700 font-extrabold text-sm">
-                              ✓
+                            <span className="inline-block px-1.5 py-0.5 text-[11px] font-bold text-amber-800 bg-amber-50 rounded border border-amber-200/80">
+                              음주
                             </span>
                           ) : (
                             <span className="text-gray-300">-</span>
