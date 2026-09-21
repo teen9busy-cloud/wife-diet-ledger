@@ -3,8 +3,10 @@ export interface DailyRecord {
   date: string; // YYYY-MM-DD
   weight: number | null;
   workoutDone: boolean;
-  workoutCategory?: string; // 헬스, 홈트, 유산소 등
-  workoutType?: string;     // 천국의 계단, 러닝머신, 자전거 등
+  workoutCategory?: string; // 단일 호환용
+  workoutType?: string;     // 단일 호환용
+  workoutCategories?: string[]; // 다중 대분류 선택 (예: ['헬스', '홈트'])
+  workoutTypes?: string[];      // 다중 소분류 선택 (예: ['천국의 계단', '스쿼트'])
   workoutDuration?: number | null; // 분
   workoutCalories?: number | null; // kcal
   period: boolean;          // 생리 여부
