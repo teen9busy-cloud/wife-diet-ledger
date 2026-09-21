@@ -217,12 +217,12 @@ export const RecordLedgerTab: React.FC<RecordLedgerTabProps> = ({ onOpenAddModal
                 </div>
               )}
 
-              {/* 음주 (너비 36px) */}
+              {/* 음주 여부 (너비 36px) */}
               {settings.columns.showAlcohol && (
                 <div className="w-9 flex-shrink-0 text-center text-gray-700">
-                  {rec && rec.alcoholCount > 0 ? (
-                    <span className="inline-block px-1.5 py-0.2 text-[10px] font-bold rounded bg-amber-50 text-amber-800 border border-amber-200">
-                      {rec.alcoholCount}
+                  {rec && (rec.alcohol || (rec.alcoholCount && rec.alcoholCount > 0)) ? (
+                    <span className="inline-flex items-center justify-center text-amber-700 font-extrabold text-sm">
+                      ✓
                     </span>
                   ) : (
                     <span className="text-gray-300">-</span>

@@ -207,17 +207,17 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const exportDataCSV = () => {
-    const headers = ['날짜', '체중(kg)', '운동여부', '운동대분류', '운동종류', '운동시간(분)', '칼로리(kcal)', '생리여부', '음주잔수', '메모'];
+    const headers = ['날짜', '체중(kg)', '운동여부', '운동대분류', '운동종류', '운동시간(분)', '칼로리(kcal)', '생리여부', '음주여부', '메모'];
     const rows = records.map((r) => [
       r.date,
       r.weight ?? '',
       r.workoutDone ? 'O' : 'X',
-      r.workoutCategory ?? '',
-      r.workoutType ?? '',
+      r.workoutCategories?.join(', ') || r.workoutCategory || '',
+      r.workoutTypes?.join(', ') || r.workoutType || '',
       r.workoutDuration ?? '',
       r.workoutCalories ?? '',
       r.period ? 'O' : 'X',
-      r.alcoholCount || 0,
+      (r.alcohol || (r.alcoholCount && r.alcoholCount > 0)) ? 'O' : 'X',
       `"${(r.memo || '').replace(/"/g, '""')}"`,
     ]);
     const csvContent = '\uFEFF' + [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');

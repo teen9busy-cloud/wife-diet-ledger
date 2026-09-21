@@ -30,7 +30,7 @@ export const RecordModal: React.FC<RecordModalProps> = ({
   const [duration, setDuration] = useState<string>('');
   const [calories, setCalories] = useState<string>('');
   const [period, setPeriod] = useState<boolean>(false);
-  const [alcoholCount, setAlcoholCount] = useState<number>(0);
+  const [alcohol, setAlcohol] = useState<boolean>(false);
   const [memo, setMemo] = useState<string>('');
 
   useEffect(() => {
@@ -60,7 +60,7 @@ export const RecordModal: React.FC<RecordModalProps> = ({
       setDuration(initialRecord.workoutDuration ? String(initialRecord.workoutDuration) : '');
       setCalories(initialRecord.workoutCalories ? String(initialRecord.workoutCalories) : '');
       setPeriod(initialRecord.period);
-      setAlcoholCount(initialRecord.alcoholCount || 0);
+      setAlcohol(Boolean(initialRecord.alcohol || (initialRecord.alcoholCount && initialRecord.alcoholCount > 0)));
       setMemo(initialRecord.memo || '');
     } else {
       setDate(targetDate || todayStr);
@@ -72,7 +72,7 @@ export const RecordModal: React.FC<RecordModalProps> = ({
       setDuration('');
       setCalories('');
       setPeriod(false);
-      setAlcoholCount(0);
+      setAlcohol(false);
       setMemo('');
     }
   }, [initialRecord, targetDate, isOpen, categories, todayStr]);
@@ -132,7 +132,8 @@ export const RecordModal: React.FC<RecordModalProps> = ({
       workoutDuration: workoutDone && duration ? parseInt(duration, 10) : null,
       workoutCalories: workoutDone && calories ? parseInt(calories, 10) : null,
       period,
-      alcoholCount,
+      alcohol,
+      alcoholCount: alcohol ? 1 : 0,
       memo: memo.trim(),
     });
 
@@ -381,32 +382,28 @@ export const RecordModal: React.FC<RecordModalProps> = ({
               </div>
             </button>
 
-            {/* 음주 잔 수 */}
-            <div className="p-2.5 rounded-xl border border-gray-200 bg-white flex items-center justify-between">
-              <span className="text-xs font-medium text-gray-600 flex items-center gap-1">
-                <Wine className="w-3.5 h-3.5 text-amber-600" />
+            {/* 음주 여부 토글 */}
+            <button
+              type="button"
+              onClick={() => setAlcohol(!alcohol)}
+              className={`p-2.5 rounded-xl border flex items-center justify-between transition ${
+                alcohol
+                  ? 'bg-amber-50 border-amber-300 text-amber-800 font-semibold'
+                  : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              <span className="text-xs font-medium flex items-center gap-1.5">
+                <Wine className={`w-3.5 h-3.5 ${alcohol ? 'text-amber-600 fill-amber-500' : 'text-gray-400'}`} />
                 음주
               </span>
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={() => setAlcoholCount((prev) => Math.max(0, prev - 1))}
-                  className="w-5 h-5 rounded bg-gray-100 text-gray-600 hover:bg-gray-200 font-bold flex items-center justify-center text-xs"
-                >
-                  -
-                </button>
-                <span className="text-xs font-bold text-gray-800 w-4 text-center">
-                  {alcoholCount}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setAlcoholCount((prev) => prev + 1)}
-                  className="w-5 h-5 rounded bg-amber-100 text-amber-800 hover:bg-amber-200 font-bold flex items-center justify-center text-xs"
-                >
-                  +
-                </button>
+              <div
+                className={`w-4 h-4 rounded flex items-center justify-center border ${
+                  alcohol ? 'bg-amber-600 border-amber-600 text-white' : 'border-gray-300 bg-white'
+                }`}
+              >
+                {alcohol && <Check className="w-3 h-3 stroke-[3]" />}
               </div>
-            </div>
+            </button>
           </div>
 
           {/* 4. 메모 */}

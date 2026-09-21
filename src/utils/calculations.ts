@@ -98,7 +98,7 @@ export function generateStats(records: DailyRecord[], period: 'weekly' | 'monthl
     const avgWeight = weights.length > 0 ? Number((weights.reduce((a, b) => a + b, 0) / weights.length).toFixed(2)) : null;
 
     const workoutCount = list.filter((r) => r.workoutDone).length;
-    const alcoholCount = list.reduce((sum, r) => sum + (r.alcoholCount > 0 ? 1 : 0), 0);
+    const alcoholCount = list.reduce((sum, r) => sum + (r.alcohol || (r.alcoholCount && r.alcoholCount > 0) ? 1 : 0), 0);
 
     let label = '';
     if (period === 'weekly') {

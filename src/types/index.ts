@@ -10,7 +10,8 @@ export interface DailyRecord {
   workoutDuration?: number | null; // 분
   workoutCalories?: number | null; // kcal
   period: boolean;          // 생리 여부
-  alcoholCount: number;     // 음주 잔/횟수 (0=안마심)
+  alcohol?: boolean;        // 음주 여부 (true / false)
+  alcoholCount?: number;    // 호환용 잔/횟수
   memo: string;
 }
 
