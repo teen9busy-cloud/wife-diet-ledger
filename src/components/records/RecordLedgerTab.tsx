@@ -120,7 +120,7 @@ export const RecordLedgerTab: React.FC<RecordLedgerTabProps> = ({ onOpenAddModal
           <div className="w-12 flex-shrink-0 text-center">체중</div>
         )}
         {settings.columns.showWorkout && (
-          <div className="w-9 flex-shrink-0 text-center">운동</div>
+          <div className="w-14 flex-shrink-0 text-center">운동</div>
         )}
         {settings.columns.showAlcohol && (
           <div className="w-9 flex-shrink-0 text-center">음주</div>
@@ -176,8 +176,31 @@ export const RecordLedgerTab: React.FC<RecordLedgerTabProps> = ({ onOpenAddModal
           if (filter === 'workout' && !rec?.workoutDone) return null;
           if (filter === 'diet' && !rec?.memo && !rec?.period) return null;
 
-          // 운동 라벨 (단일 또는 다중 선택)
-          const workoutText = rec?.workoutTypes?.join(', ') || rec?.workoutType;
+          // 운동 컬럼에 표시할 대분류/입력 텍스트 (예: '홈트', '헬스')
+          const getWorkoutCategoryText = (r?: DailyRecord) => {
+            if (!r || !r.workoutDone) return null;
+            if (r.workoutCategories && r.workoutCategories.length > 0) {
+              return r.workoutCategories.join(', ');
+            }
+            if (r.workoutCategory) {
+              return r.workoutCategory;
+            }
+            if (r.workoutTypes && r.workoutTypes.length > 0) {
+              return r.workoutTypes.join(', ');
+            }
+            if (r.workoutType) {
+              return r.workoutType;
+            }
+            return '운동';
+          };
+
+          const categoryLabel = getWorkoutCategoryText(rec);
+
+          // 세부 운동 종류 (카테고리와 다른 구체적 운동명이 있을 때만 메모에 뱃지 표시)
+          const detailTypes = rec?.workoutTypes && rec.workoutTypes.length > 0
+            ? rec.workoutTypes.join(', ')
+            : rec?.workoutType;
+          const showDetailInMemo = detailTypes && detailTypes !== categoryLabel;
 
           return (
             <div
@@ -204,12 +227,12 @@ export const RecordLedgerTab: React.FC<RecordLedgerTabProps> = ({ onOpenAddModal
                 </div>
               )}
 
-              {/* 운동 여부 (너비 36px) */}
+              {/* 운동 (너비 56px - 체크 대신 '홈트', '헬스' 등 입력 내용 노출) */}
               {settings.columns.showWorkout && (
-                <div className="w-9 flex-shrink-0 flex items-center justify-center">
-                  {rec?.workoutDone ? (
-                    <span className="inline-flex items-center justify-center text-brand-700 font-extrabold text-sm">
-                      ✓
+                <div className="w-14 flex-shrink-0 text-center flex items-center justify-center">
+                  {rec?.workoutDone && categoryLabel ? (
+                    <span className="inline-block px-1.5 py-0.5 text-[11px] font-bold text-brand-700 bg-brand-50 rounded border border-brand-200/70 break-words leading-tight max-w-full">
+                      {categoryLabel}
                     </span>
                   ) : (
                     <span className="text-gray-300">-</span>
@@ -237,7 +260,7 @@ export const RecordLedgerTab: React.FC<RecordLedgerTabProps> = ({ onOpenAddModal
                 </div>
               )}
 
-              {/* 메모 / 운동명 / 생리 (가변 flex-1, 줄바꿈 허용으로 전체 텍스트 100% 노출) */}
+              {/* 메모 / 세부 운동명 / 생리 */}
               {settings.columns.showMemo && (
                 <div className="flex-1 min-w-0 pl-1.5 text-left break-words leading-tight space-y-0.5">
                   <div className="flex flex-wrap items-center gap-1">
@@ -246,9 +269,9 @@ export const RecordLedgerTab: React.FC<RecordLedgerTabProps> = ({ onOpenAddModal
                         생리
                       </span>
                     )}
-                    {workoutText && (
+                    {showDetailInMemo && (
                       <span className="inline-block text-[11px] text-brand-700 font-bold">
-                        [{workoutText}]
+                        [{detailTypes}]
                       </span>
                     )}
                   </div>
