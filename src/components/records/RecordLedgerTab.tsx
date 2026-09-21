@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
-import { BookOpen, Utensils, Dumbbell, Plus, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useData } from '../../context/DataContext';
-import { DailyRecord, LedgerFilterType } from '../../types';
+import { DailyRecord } from '../../types';
 import { getDayOfWeek } from '../../utils/calculations';
 
 interface RecordLedgerTabProps {
@@ -11,7 +11,6 @@ interface RecordLedgerTabProps {
 
 export const RecordLedgerTab: React.FC<RecordLedgerTabProps> = ({ onOpenAddModal, onEditRecord }) => {
   const { records, settings } = useData();
-  const [filter, setFilter] = useState<LedgerFilterType>('all');
   
   // 연도 선택 (기본: 2026년)
   const [selectedYear, setSelectedYear] = useState<number>(2026);
@@ -62,56 +61,8 @@ export const RecordLedgerTab: React.FC<RecordLedgerTabProps> = ({ onOpenAddModal
   const handleNextYear = () => setSelectedYear((prev) => prev + 1);
 
   return (
-    <div className="pb-28">
-      {/* 1. 상단 서브탭 (체중/다이어리, 식단, 운동) */}
-      <div className="bg-white border-b border-gray-100 flex items-center justify-around px-2">
-        <button
-          onClick={() => setFilter('all')}
-          className={`flex items-center justify-center py-2.5 flex-1 relative transition-colors ${
-            filter === 'all' ? 'text-brand-600' : 'text-gray-400 hover:text-gray-600'
-          }`}
-          title="체중 기록"
-        >
-          <div className="p-1 rounded">
-            <BookOpen className="w-5 h-5 stroke-[2.2]" />
-          </div>
-          {filter === 'all' && (
-            <span className="absolute bottom-0 left-6 right-6 h-0.5 bg-brand-600 rounded-full" />
-          )}
-        </button>
-
-        <button
-          onClick={() => setFilter('diet')}
-          className={`flex items-center justify-center py-2.5 flex-1 relative transition-colors ${
-            filter === 'diet' ? 'text-brand-600' : 'text-gray-400 hover:text-gray-600'
-          }`}
-          title="식단 / 메모"
-        >
-          <div className="p-1 rounded">
-            <Utensils className="w-5 h-5 stroke-[2.2]" />
-          </div>
-          {filter === 'diet' && (
-            <span className="absolute bottom-0 left-6 right-6 h-0.5 bg-brand-600 rounded-full" />
-          )}
-        </button>
-
-        <button
-          onClick={() => setFilter('workout')}
-          className={`flex items-center justify-center py-2.5 flex-1 relative transition-colors ${
-            filter === 'workout' ? 'text-brand-600' : 'text-gray-400 hover:text-gray-600'
-          }`}
-          title="운동 기록"
-        >
-          <div className="p-1 rounded">
-            <Dumbbell className="w-5 h-5 stroke-[2.2]" />
-          </div>
-          {filter === 'workout' && (
-            <span className="absolute bottom-0 left-6 right-6 h-0.5 bg-brand-600 rounded-full" />
-          )}
-        </button>
-      </div>
-
-      {/* 2. 연도 선택 & 월 바로가기 칩 네비게이션 (와이프 피드백: 모든 월/날짜 지원) */}
+    <div className="pb-20">
+      {/* 1. 연도 선택 & 월 바로가기 칩 네비게이션 */}
       <div className="bg-white px-3 pt-2.5 pb-2 border-b border-gray-100 shadow-2xs">
         <div className="flex items-center justify-between mb-2">
           {/* 연도 네비게이션 */}
@@ -239,10 +190,6 @@ export const RecordLedgerTab: React.FC<RecordLedgerTabProps> = ({ onOpenAddModal
                   if (dayIndex === 6) dayColor = 'text-blue-600';
                   if (dayIndex === 0) dayColor = 'text-rose-600';
 
-                  // 필터 적용
-                  if (filter === 'workout' && !rec?.workoutDone) return null;
-                  if (filter === 'diet' && !rec?.memo && !rec?.period) return null;
-
                   // 운동 대분류 텍스트
                   const getWorkoutCategoryText = (r?: DailyRecord) => {
                     if (!r || !r.workoutDone) return null;
@@ -368,14 +315,16 @@ export const RecordLedgerTab: React.FC<RecordLedgerTabProps> = ({ onOpenAddModal
         })}
       </div>
 
-      {/* 5. 우측 하단 플로팅 + 버튼 */}
-      <button
-        onClick={() => onOpenAddModal()}
-        aria-label="새 기록 추가"
-        className="fixed right-4 bottom-20 z-30 w-13 h-13 rounded-full bg-brand-600 hover:bg-brand-700 active:scale-95 text-white shadow-lg flex items-center justify-center transition-all"
-      >
-        <Plus className="w-6 h-6 stroke-[2.5]" />
-      </button>
+      {/* 플로팅 새 기록 추가 버튼 */}
+      <div className="fixed bottom-6 inset-x-0 max-w-md mx-auto pointer-events-none z-30 px-5 flex justify-end">
+        <button
+          onClick={() => onOpenAddModal()}
+          aria-label="새 기록 추가"
+          className="pointer-events-auto w-13 h-13 rounded-full bg-brand-600 hover:bg-brand-700 active:scale-95 text-white shadow-xl flex items-center justify-center transition-all"
+        >
+          <Plus className="w-6 h-6 stroke-[2.5]" />
+        </button>
+      </div>
     </div>
   );
 };

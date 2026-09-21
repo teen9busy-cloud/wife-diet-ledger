@@ -50,7 +50,7 @@ export const SettingsTab: React.FC = () => {
   };
 
   return (
-    <div className="pb-28 px-4 pt-4 space-y-5 max-w-md mx-auto text-sm">
+    <div className="pb-12 px-4 pt-4 space-y-5 max-w-md mx-auto text-sm">
       {/* 1. 목표 및 신체 정보 설정 */}
       <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 space-y-3">
         <h3 className="font-bold text-gray-900 flex items-center gap-1.5 text-base">

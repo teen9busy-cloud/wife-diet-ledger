@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { DataProvider, useData } from './context/DataContext';
 import { Header } from './components/layout/Header';
-import { BottomNav } from './components/layout/BottomNav';
 import { RecordLedgerTab } from './components/records/RecordLedgerTab';
 import { RecordModal } from './components/records/RecordModal';
 import { StatsTab } from './components/stats/StatsTab';
@@ -83,9 +82,6 @@ const AppContent: React.FC = () => {
 
           {activeTab === 'settings' && <SettingsTab />}
         </main>
-
-        {/* 하단 고정 탭 바 */}
-        <BottomNav />
 
         {/* 기록 입력/수정 팝업 */}
         <RecordModal

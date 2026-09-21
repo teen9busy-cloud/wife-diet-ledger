@@ -20,7 +20,7 @@ export const StatsTab: React.FC = () => {
   }, [statsRows]);
 
   return (
-    <div className="pb-24 max-w-md mx-auto">
+    <div className="pb-12 max-w-md mx-auto">
       {/* 1. 상단 서브 기간 탭 (스크린샷 2와 100% 동일: 주간, 월간, 연간, 기간) */}
       <div className="bg-white border-b border-gray-100 flex items-center justify-around px-2 text-sm font-medium">
         <button

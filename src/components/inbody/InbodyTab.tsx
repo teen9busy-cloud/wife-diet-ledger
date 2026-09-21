@@ -39,7 +39,7 @@ export const InbodyTab: React.FC = () => {
     : null;
 
   return (
-    <div className="pb-24 px-4 pt-4 space-y-4 max-w-md mx-auto">
+    <div className="pb-12 px-4 pt-4 space-y-4 max-w-md mx-auto">
       {/* 1. 목표 몸무게 & 남은 체중 달성 카드 (Hero Card) */}
       <div className="bg-gradient-to-br from-brand-600 to-brand-700 rounded-2xl p-5 text-white shadow-lg relative overflow-hidden">
         <div className="absolute -right-6 -bottom-6 w-32 h-32 rounded-full bg-white/10 blur-xl pointer-events-none" />
