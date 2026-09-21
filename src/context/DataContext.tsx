@@ -47,9 +47,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const saved = localStorage.getItem(STORAGE_KEYS.RECORDS);
       if (saved) {
-        const parsed: DailyRecord[] = JSON.parse(saved);
-        // 8월 기록 모두 제거
-        return parsed.filter((r) => !r.date.startsWith('2026-08'));
+        return JSON.parse(saved);
       }
       return initialRecords;
     } catch {
@@ -61,9 +59,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const saved = localStorage.getItem(STORAGE_KEYS.INBODY);
       if (saved) {
-        const parsed: InBodyRecord[] = JSON.parse(saved);
-        // 8월 인바디 기록 제거
-        return parsed.filter((r) => !r.date.startsWith('2026-08'));
+        return JSON.parse(saved);
       }
       return initialInBodyRecords;
     } catch {

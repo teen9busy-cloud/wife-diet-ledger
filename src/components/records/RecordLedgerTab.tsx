@@ -53,7 +53,8 @@ export const RecordLedgerTab: React.FC<RecordLedgerTabProps> = ({ onOpenAddModal
     const weights = list.filter((r) => r.weight !== null).map((r) => r.weight as number);
     const avgWeight = weights.length > 0 ? (weights.reduce((a, b) => a + b, 0) / weights.length).toFixed(1) : '-';
     const workoutCount = list.filter((r) => r.workoutDone).length;
-    return { avgWeight, workoutCount, recordCount: list.length };
+    const totalCalories = list.reduce((sum, r) => sum + (r.workoutCalories || 0), 0);
+    return { avgWeight, workoutCount, totalCalories, recordCount: list.length };
   };
 
   // 연도 변경
@@ -214,6 +215,7 @@ export const RecordLedgerTab: React.FC<RecordLedgerTabProps> = ({ onOpenAddModal
                   </h3>
                   <span className="text-[11px] text-gray-500 font-normal">
                     {stats.avgWeight !== '-' ? `평균 ${stats.avgWeight}kg · ` : ''}운동 {stats.workoutCount}회
+                    {stats.totalCalories > 0 ? ` · 🔥 소모 ${stats.totalCalories.toLocaleString()}kcal` : ''}
                   </span>
                 </div>
 
@@ -325,7 +327,7 @@ export const RecordLedgerTab: React.FC<RecordLedgerTabProps> = ({ onOpenAddModal
                         </div>
                       )}
 
-                      {/* 메모 / 세부 운동 / 생리 */}
+                      {/* 메모 / 세부 운동 / 소모 칼로리 / 생리 */}
                       {settings.columns.showMemo && (
                         <div className="flex-1 min-w-0 pl-1.5 text-left break-words leading-tight space-y-0.5">
                           <div className="flex flex-wrap items-center gap-1">
@@ -339,6 +341,16 @@ export const RecordLedgerTab: React.FC<RecordLedgerTabProps> = ({ onOpenAddModal
                                 [{detailTypes}]
                               </span>
                             )}
+                            {rec?.workoutCalories ? (
+                              <span className="inline-flex items-center gap-0.5 px-1.5 py-0.2 text-[10px] font-bold rounded bg-orange-50 text-orange-700 border border-orange-200">
+                                🔥{rec.workoutCalories}kcal
+                              </span>
+                            ) : null}
+                            {rec?.workoutDuration ? (
+                              <span className="inline-block text-[10px] text-gray-500 font-medium">
+                                {rec.workoutDuration}분
+                              </span>
+                            ) : null}
                           </div>
                           {rec?.memo && (
                             <p className="text-[11px] text-gray-700 break-words leading-snug">
